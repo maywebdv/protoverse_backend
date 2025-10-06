@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-//schema for the supplier (partner) independently from the 3d printer's details
+//schema for the partner independently from the 3d printer's details
 const partnerSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -42,6 +42,6 @@ const partnerSchema = new mongoose.Schema({
   }
 });
 
-module.exports =mongoose.model('partner', partnerSchema);
+module.exports =mongoose.model('Partner', partnerSchema);
 
 
