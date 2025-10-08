@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect, authorize } = require('../middleware/auth');
-const Partner = require('../models/partner');
+const Supplier = require('../models/Supplier');
 const Order = require('../models/Order');
 const User = require('../models/User');
 
@@ -14,7 +14,7 @@ router.use(authorize('admin'));
 // @access  Admin
 router.get('/suppliers/pending', async (req, res) => {
   try {
-    const suppliers = await Partner.find({ statut: 'pending' })
+    const suppliers = await Supplier.find({ statut: 'pending' })
       .populate('user', 'nom prenom email telephone')
       .sort('-createdAt');
     
@@ -31,7 +31,7 @@ router.put('/suppliers/:id/validate', async (req, res) => {
   try {
     const { statut, commentaire } = req.body; // approved ou rejected
 
-    const supplier = await Partner.findByIdAndUpdate(
+    const supplier = await Supplier.findByIdAndUpdate(
       req.params.id,
       { 
         statut,
@@ -70,7 +70,7 @@ router.get('/orders', async (req, res) => {
     const orders = await Order.find()
       .populate('client', 'nom prenom email')
       .populate({
-        path: 'partner',
+        path: 'supplier',
         populate: { path: 'user', select: 'nom prenom email' }
       })
       .sort('-dateCommande');
@@ -94,9 +94,9 @@ router.get('/stats', async (req, res) => {
         admins: await User.countDocuments({ role: 'admin' })
       },
       suppliers: {
-        pending: await Partner.countDocuments({ statut: 'pending' }),
-        approved: await Partner.countDocuments({ statut: 'approved' }),
-        rejected: await Partner.countDocuments({ statut: 'rejected' })
+        pending: await Supplier.countDocuments({ statut: 'pending' }),
+        approved: await Supplier.countDocuments({ statut: 'approved' }),
+        rejected: await Supplier.countDocuments({ statut: 'rejected' })
       },
       orders: {
         total: await Order.countDocuments(),

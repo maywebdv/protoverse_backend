@@ -1,10 +1,10 @@
-const Partner = require('../models/partner');
+const Supplier = require('../models/Supplier');
 const Order = require('../models/Order');
 
 // Liste des fournisseurs disponibles
 exports.getSuppliers = async (req, res) => {
   try {
-    const suppliers = await Partner.find({ 
+    const suppliers = await Supplier.find({ 
       statut: 'approved',
       disponible: true 
     }).populate('user', 'nom prenom email ville');
@@ -34,7 +34,7 @@ exports.getOrders = async (req, res) => {
   try {
     const orders = await Order.find({ client: req.user._id })
       .populate({
-        path: 'partner',
+        path: 'supplier',
         populate: { path: 'user', select: 'nom prenom' }
       })
       .sort('-dateCommande');
