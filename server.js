@@ -4,6 +4,9 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 
+const partnerRoutes= require("./routes/partnerRoutes");
+const printerRoutes= require("./routes/printerRoutes");
+
 // Charger les variables d'environnement EN PREMIER
 dotenv.config();
 
@@ -30,8 +33,10 @@ app.get('/', (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/client', require('./routes/client'));
-app.use('/api/supplier', require('./routes/supplier'));
-
+//app.use('/api/supplier', require('./routes/supplier'));
+app.use('/partner', partnerRoutes);
+// Nested printer routes under a partner
+app.use('/partner/:partnerId/printers', printerRoutes);
 
 
 // Gestion des erreurs
