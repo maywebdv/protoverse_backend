@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const Partner = require('../models/partner');
+const Supplier = require('../models/Supplier');
 const jwt = require('jsonwebtoken');
 
 // Générer un token JWT
@@ -24,8 +24,8 @@ exports.registerUser = async (req, res) => {
       telephone
     });
 
-    if (role === 'partner') {
-      await Partner.create({
+    if (role === 'supplier') {
+      await Supplier.create({
         user: user._id,
         nomEntreprise: req.body.nomEntreprise || `${nom} ${prenom}`,
         statut: 'pending'
